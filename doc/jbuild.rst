@@ -7,7 +7,7 @@ its name. They are used to describe libraries, executables, tests, and
 everything Jbuilder needs to know about.
 
 The syntax of ``jbuild`` files is described in
-:ref:``metadata-format`` section.
+:ref:`metadata-format` section.
 
 Stanzas
 =======
