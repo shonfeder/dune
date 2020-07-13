@@ -16,7 +16,8 @@ odoc \
 ppx_expect \
 ppx_inline_test \
 ppxlib \
-utop
+utop \
+mdx
 
 -include Makefile.dev
 
