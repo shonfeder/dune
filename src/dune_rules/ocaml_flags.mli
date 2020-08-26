@@ -13,6 +13,8 @@ module Spec : sig
   val decode : t Dune_lang.Decoder.fields_parser
 
   val standard : t
+
+  val decode_compile_flags_field : string -> t Dune_lang.Decoder.fields_parser
 end
 
 val make :

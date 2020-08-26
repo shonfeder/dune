@@ -84,6 +84,13 @@ module Spec = struct
     and+ native = field_oslu "ocamlopt_flags" in
     let specific = Mode.Dict.make ~native ~byte in
     { common; specific }
+
+  let decode_compile_flags_field field_name =
+    let open Dune_lang.Decoder in
+    let field_oslu = Ordered_set_lang.Unexpanded.field in
+    let+ common = field_oslu field_name in
+    let specific = Mode.Dict.make_both Ordered_set_lang.Unexpanded.standard in
+    { common; specific }
 end
 
 type t = string list Build.t t'
