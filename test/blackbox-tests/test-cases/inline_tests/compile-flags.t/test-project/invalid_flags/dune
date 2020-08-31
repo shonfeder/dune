@@ -1,0 +1,5 @@
+(library
+ (name invalid_compile_flags_test)
+ (inline_tests
+  (backend backend_foo)
+  (compile_flags -flag-that-is-not-accepted-by-ocaml)))

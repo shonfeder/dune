@@ -1,0 +1,5 @@
+(library
+ (name valid_compile_flags_test)
+ (inline_tests
+  (backend backend_foo)
+  (compile_flags -nolabels)))
