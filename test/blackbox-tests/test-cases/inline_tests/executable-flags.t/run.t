@@ -16,5 +16,11 @@ to fail.
   unknown option '-option-that-is-not-accepted-by-ocaml'.
   [1]
 
-This should warn when there is a unused open module
+Do not warn when there is a unused open module in the inline tests.
+Protects against the regression reported in
+https://github.com/ocaml/dune/issues/4177
+
   $ dune runtest open_opt --root ./test-project
+  Entering directory 'test-project'
+  inline_test_runner_test_foo alias open_opt/runtest
+  unused_open_backend
