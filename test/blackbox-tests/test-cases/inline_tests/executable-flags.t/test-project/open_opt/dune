@@ -1,0 +1,5 @@
+(library
+ (name test_foo)
+ (inline_tests
+  (backend backend_foo)
+  (flags :standard -w -24 -g )))

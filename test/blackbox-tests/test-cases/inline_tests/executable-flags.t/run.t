@@ -15,3 +15,6 @@ to fail.
   $ output=$(dune runtest invalid_options --root ./test-project 2>&1); result=$?; (echo $output | grep -o "unknown option '-option-that-is-not-accepted-by-ocaml'."); (exit $result)
   unknown option '-option-that-is-not-accepted-by-ocaml'.
   [1]
+
+This should warn when there is a unused open module
+  $ dune runtest open_opt --root ./test-project

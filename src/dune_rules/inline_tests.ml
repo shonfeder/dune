@@ -277,15 +277,17 @@ include Sub_system.Register_end_point (struct
        Action_builder.With_targets.add ~targets:[ target ] action);
     let cctx =
       let package = Dune_file.Library.package lib in
-      let flags =
+      (* let flags =
         Ocaml_flags.append_common
           (Super_context.ocaml_flags sctx ~dir info.executable)
           [ "-w"; "-24"; "-g" ]
-      in
+      in *)
       Compilation_context.create () ~super_context:sctx ~expander ~scope
         ~obj_dir ~modules ~opaque:(Explicit false) ~requires_compile:runner_libs
         ~requires_link:(lazy runner_libs)
-        ~flags ~js_of_ocaml:(Some lib.buildable.js_of_ocaml) ~package
+        (* ~flags *)
+        ~flags:(Ocaml_flags.of_list [ "-w"; "-24"; "-g" ]) 
+        ~js_of_ocaml:(Some lib.buildable.js_of_ocaml) ~package
     in
     let linkages =
       let modes =
