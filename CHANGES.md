@@ -1,10 +1,18 @@
-3.21.0 (2026-01-12)
--------------------
+3.21.1~alpha0 (2026-02-10)
+---------------------------
 
 ### Fixed
 
-- Fix `include_subdirs qualified` incorrectly picking the furthest module
-  instead of the closest when resolving module name ambiguities. (#12587,
+- Fix build issues on NetBSD and OpenBSD via update of vendored ocaml-lmdb
+  (@Alizter, #13074)
+
+- Fix `melange.emit` not respecting the package mask via `-p <PKG>` (#13522,
+  @anmonteiro)
+
+### Changed
+
+- Stop starting RPC server with `$ dune promote` (#13428, @rgrinberg)
+
   @ElectreAAS and @Alizter)
 
 - Fix: include the module alias in the transitive dependency closure with
