@@ -569,11 +569,19 @@ let term =
     let open Fiber.O in
     Pkg_common.check_pkg_management_enabled ()
     >>>
-    let portable_lock_dir =
-      match Config.get Dune_rules.Compile_time.portable_lock_dir with
-      | `Enabled -> true
-      | `Disabled -> false
+    let* dune_version =
+      let root = Path.of_string (Common.root common).dir in
+      Memo.run
+      @@
+      let open Memo.O in
+      let+ dir =
+        match Path.as_in_source_tree root with
+        | None -> Source_tree.root ()
+        | Some path -> Source_tree.nearest_dir path
+      in
+      Dune_project.dune_version (Source_tree.Dir.project dir)
     in
+    let portable_lock_dir = Dune_rules.Compile_time.use_portable_lock_dir dune_version in
     lock ~version_preference ~lock_dirs_arg ~print_perf_stats ~portable_lock_dir)
 ;;
 

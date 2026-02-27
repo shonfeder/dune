@@ -135,11 +135,7 @@ module Spec = struct
     let open Fiber.O in
     let* () = Fiber.return () in
     let local_packages = Package.Name.Map.map packages ~f:Local_package.for_solver in
-    let portable_lock_dir =
-      match Config.get Compile_time.portable_lock_dir with
-      | `Enabled -> true
-      | `Disabled -> false
-    in
+    let portable_lock_dir = Compile_time.use_portable_lock_dir dune_version in
     let* solver_env =
       (* CR-soon Alizter: This solver environment construction pattern (combining
        solver_env_from_current_system with solver_env_from_context, then

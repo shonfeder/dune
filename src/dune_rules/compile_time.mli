@@ -18,4 +18,6 @@ val toolchains : Config.Toggle.t Config.t
 val lock_dev_tools : Config.Toggle.t Config.t
 
 val bin_dev_tools : Config.Toggle.t Config.t
-val portable_lock_dir : Config.Toggle.t Config.t
+
+(** TODO *)
+val use_portable_lock_dir : Dune_lang.Syntax.Version.t -> bool
