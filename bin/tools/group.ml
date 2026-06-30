@@ -1,37 +1,31 @@
 open Import
 
-module type Command_spec = sig
-  val doc : string
-  val prefix : string
-  val command : Dune_pkg.Dev_tool.t -> unit Cmdliner.Cmd.t
-end
+let subcommand ~prefix ~doc f =
+  let info = Cmd.info ~doc prefix in
+  Cmd.group info (List.map Dune_pkg.Dev_tool.all ~f)
+;;
 
-module Subcommand (S : Command_spec) = struct
-  let info = Cmd.info ~doc:S.doc S.prefix
-  let group = Cmd.group info (List.map Dune_pkg.Dev_tool.all ~f:S.command)
-end
+let exec =
+  subcommand
+    ~prefix:"exec"
+    ~doc:"Command group for running wrapped tools."
+    Tools_common.exec_command
+;;
 
-module Exec = Subcommand (struct
-    let doc = "Command group for running wrapped tools."
-    let prefix = "exec"
-    let command = Tools_common.exec_command
-  end)
+let install =
+  subcommand
+    ~prefix:"install"
+    ~doc:"Command group for installing wrapped tools."
+    Tools_common.install_command
+;;
 
-module Install = Subcommand (struct
-    let doc = "Command group for installing wrapped tools."
-    let prefix = "install"
-    let command = Tools_common.install_command
-  end)
-
-module Which = Subcommand (struct
-    let doc = "Command group for printing the path to wrapped tools."
-    let prefix = "which"
-    let command = Tools_common.which_command
-  end)
+let which =
+  subcommand
+    ~prefix:"which"
+    ~doc:"Command group for printing the path to wrapped tools."
+    Tools_common.which_command
+;;
 
 let doc = "Command group for wrapped tools."
 let info = Cmd.info ~doc "tools"
-
-let group =
-  Cmd.group info [ Exec.group; Install.group; Which.group; Tools_common.env_command ]
-;;
+let group = Cmd.group info [ exec; install; which; Tools_common.env_command ]
