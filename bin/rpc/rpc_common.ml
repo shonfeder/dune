@@ -44,8 +44,12 @@ let request_exn client request arg =
     Client.request client decl arg
     >>| (function
      | Ok response -> response
-     | Error e -> raise_rpc_error e)
-  | Error e -> raise (Dune_rpc.Version_error.E e)
+     | Error e ->
+       print_endline ">>> ABout to raise";
+       raise_rpc_error e)
+  | Error e ->
+    print_endline ">>> ABout to other raise";
+    raise (Dune_rpc.Version_error.E e)
 ;;
 
 let notify_exn client notification arg =
@@ -94,13 +98,17 @@ let establish_connection_with_retry () =
 
 let establish_client_session ~wait ~lock_held_by =
   let open Fiber.O in
+  print_endline ">>> tryina est conn";
   if wait
   then establish_connection_with_retry ()
-  else
+  else (
+    print_endline ">>> without a wait";
     establish_connection ~lock_held_by ()
     >>= function
     | Ok r -> Fiber.return r
-    | Error msg -> raise (Global_lock.E msg)
+    | Error msg ->
+      print_endline ">>> OK: We are raising";
+      raise (Global_lock.E msg))
 ;;
 
 let prepare_targets targets =
@@ -172,6 +180,7 @@ let fire ~name ~wait ~warn_forwarding ~lock_held_by builder f =
   let open Fiber.O in
   let* connection = establish_client_session ~wait ~lock_held_by in
   if should_warn ~warn_forwarding builder then warn_ignore_arguments lock_held_by;
+  print_endline ">>>>> about to send request";
   send_request connection name ~f
 ;;
 

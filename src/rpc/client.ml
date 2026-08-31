@@ -21,6 +21,7 @@ module Connection = struct
   let connect_sock sock = Csexp_rpc.Client.create sock |> Csexp_rpc.Client.connect
 
   let connect_error where detail =
+    print_endline ">>> Making conne err";
     User_error.make
       [ Pp.textf "failed to connect to RPC server %s" (Where.to_string where); detail ]
   ;;
@@ -39,7 +40,9 @@ module Connection = struct
       connect_sock sock
       >>| (function
        | Ok s -> Ok s
-       | Error exn -> Error (connect_error where (Exn_with_backtrace.pp exn)))
+       | Error exn ->
+         print_endline ">>> in err";
+         Error (connect_error where (Exn_with_backtrace.pp exn)))
   ;;
 
   let connect_exn where = connect where >>| User_error.ok_exn

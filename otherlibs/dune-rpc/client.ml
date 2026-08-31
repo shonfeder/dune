@@ -336,11 +336,14 @@ struct
     let req = encode_req req in
     let* res = request_untyped t (id, req) in
     match res with
-    | `Exn exn -> raise exn
+    | `Exn exn ->
+      print_endline ">>> ABout to raise third";
+      raise exn
     | `Connection_dead -> Fiber.return `Connection_dead
     | `Cancelled -> Fiber.return `Cancelled
     | `Completed res ->
       let+ res = parse_response t decode_resp res in
+      print_endline ">>> Completed?";
       `Completed res
   ;;
 
@@ -457,7 +460,9 @@ struct
 
   let no_cancel_raise_connection_dead id = function
     | `Cancelled -> assert false
-    | `Exn exn -> raise exn
+    | `Exn exn ->
+      print_endline ">>>>> maybeg we are actually raising form here instead?";
+      raise exn
     | `Completed s -> s
     | `Connection_dead ->
       let payload = Sexp.record [ "id", Id.to_sexp id ] in

@@ -12,7 +12,7 @@ RPC socket reports the connection failure with a backtrace.
 
   $ with_timeout dune rpc ping > client.output 2>&1
   [1]
-  $ head -n 3 client.output
+  $ cat client.output
   Error: failed to connect to RPC server unix:path=_build/.rpc/dune
   Unix.Unix_error(Unix.ECONNREFUSED, "connect", "")
   backtrace:
