@@ -94,19 +94,23 @@ let lock () =
       | `Failure -> Error (Lock_held_by.read_lock_file ()))
 ;;
 
+exception E of User_message.t
+
 let lock_exn () =
   match lock () with
   | Ok () -> ()
   | Error lock_held_by ->
-    User_error.raise
-      [ Pp.textf
-          "A running dune%s instance has locked the build directory. If this is not the \
-           case, please delete %S."
-          (match lock_held_by with
-           | Unknown -> ""
-           | Pid_from_lockfile pid -> sprintf " (pid: %d)" pid)
-          (Path.Build.to_string_maybe_quoted lock_file)
-      ]
+    raise
+      (E
+         (User_error.make
+            [ Pp.textf
+                "A running dune%s instance has locked the build directory. If this is \
+                 not the case, please delete %S."
+                (match lock_held_by with
+                 | Unknown -> ""
+                 | Pid_from_lockfile pid -> sprintf " (pid: %d)" pid)
+                (Path.Build.to_string_maybe_quoted lock_file)
+            ]))
 ;;
 
 let unlock () =

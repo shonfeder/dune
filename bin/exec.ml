@@ -383,14 +383,17 @@ let term : unit Term.t =
   | Error lock_held_by ->
     (match Common.watch common with
      | Yes _ ->
-       User_error.raise
-         [ Pp.textf
-             "Another instance of dune%s has locked the _build directory. Refusing to \
-              start a new watch server until no other instances of dune are running."
-             (match lock_held_by with
-              | Unknown -> ""
-              | Pid_from_lockfile pid -> sprintf " (pid: %d)" pid)
-         ]
+       raise
+         (Global_lock.E
+            (User_error.make
+               [ Pp.textf
+                   "Another instance of dune%s has locked the _build directory. Refusing \
+                    to start a new watch server until no other instances of dune are \
+                    running."
+                   (match lock_held_by with
+                    | Unknown -> ""
+                    | Pid_from_lockfile pid -> sprintf " (pid: %d)" pid)
+               ]))
      | No ->
        let prepared_exec =
          Scheduler_setup.go_without_rpc_server ~common ~config

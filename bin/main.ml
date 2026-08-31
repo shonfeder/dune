@@ -122,6 +122,9 @@ let () =
   | Dune_scheduler.Shutdown.E Failure -> exit_and_flush Error
   | Dune_scheduler.Shutdown.E Requested -> exit_and_flush Success
   | Dune_scheduler.Shutdown.E (Signal _) -> exit_and_flush Signal
+  | Global_lock.E msg ->
+    User_message.prerr msg;
+    exit_and_flush Temp_fail
   | exn ->
     let exn = Exn_with_backtrace.capture exn in
     Dune_util.Report_error.report exn;

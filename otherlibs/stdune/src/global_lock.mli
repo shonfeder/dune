@@ -13,6 +13,8 @@ end
     dune process has acquired the lock. *)
 val lock : unit -> (unit, Lock_held_by.t) result
 
+exception E of User_message.t
+
 val lock_exn : unit -> unit
 
 (** release a lock and allow it be re-acquired *)

@@ -96,7 +96,11 @@ let establish_client_session ~wait ~lock_held_by =
   let open Fiber.O in
   if wait
   then establish_connection_with_retry ()
-  else establish_connection ~lock_held_by () >>| User_error.ok_exn
+  else
+    establish_connection ~lock_held_by ()
+    >>= function
+    | Ok r -> Fiber.return r
+    | Error msg -> raise (Global_lock.E msg)
 ;;
 
 let prepare_targets targets =
