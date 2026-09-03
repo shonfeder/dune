@@ -114,6 +114,3 @@ non-relocatable toolchain mechanism:
 Show the undesirable failure we need to fix:
 
   $ dune build _build/default/parser__mock.mli.inferred
-  File "command line", line 1:
-  Error: Unbound module Stdlib
-  [1]
